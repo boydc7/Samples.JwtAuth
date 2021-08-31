@@ -41,7 +41,27 @@ dotnet publish -c Release -o publish Samples.JwtAuth.Api/Samples.JwtAuth.Api.csp
 cd publish
 dotnet authapi.dll
 ```
+* Set the following environment variables in your IDE configuration, launch configuration, shell, etc.:
+  * NOTE: You can feel free to use the same values defined in the docker-compose.yml file in the root of the repo if you do not have/want to customize your own.
 
+  * AWS_ACCESS_KEY_ID
+    * Required if you do not set AWS_PROFILE
+    * To your programatic AWS access key id.
+  * AWS_SECRET_ACCESS_KEY
+    * Required if you do not set AWS_PROFILE
+  * AWS_PROFILE
+    * Required if you do not set the above 2 keys, OR if you have a conflicting default AWS Profile set via AWS command line tools/etc.
+    * Name of the AWS profile configured on your machine with creds to be used
+  * SMP_AUTHAPI__AWS__DYNAMO__SERVICEURL
+    * Required if not running inside docker and using a localdynamo installation as the source for DynamoDb (which would be common if you are developing locally and do not want to connect directly to a DynamoDb instance in AWS).
+    * As an example, if you were to start the auth-dynamo service only in the docker compose and wanted to connect to that from your IDE, you'd likely set this to something like:
+      * http://localhost:8085
+
+## Secrets
+For AWS related credentials, you can use any method of storing secrets/credentials that are [supported by the AWS .NET SDK](https://docs.aws.amazon.com/sdk-for-net/v3/developer-guide/net-dg-config-creds.html).  If you use one of these methods, the AWS related ENV vars do not need to be set.
+
+Can be set locally via environment variables or other non-source-controlled method, the required secrets map to the same vars above in the steps to do local development.
+  
 ## Technology and Choices, Tradeoffs
 
 On the design front I certainly cut some corners here on separating abstractions and implementation libraries - I've

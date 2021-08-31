@@ -1,13 +1,13 @@
-version: '3.7'
+version: '3.8'
 
 services:
   auth-dynamo:
     image: amazon/dynamodb-local
     container_name: auth-dynamo
     ports:
-      - "8782:8000"
-    expose:
-      - "8000"
+      - 8085:8000
+    expose: 
+      - 8085
   auth-api:
     build:
       context: .
@@ -16,3 +16,8 @@ services:
     container_name: auth-api
     ports:
       - 8084:8084
+    environment:
+      # Note: these are not valid values, they simply need to be included for local dynamo to be used...
+      - AWS_ACCESS_KEY_ID=AKIAQMUZXZPIWUCIEPWC
+      - AWS_SECRET_ACCESS_KEY=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
+      - SMP_AUTHAPI__AWS__DYNAMO__SERVICEURL=http://host.docker.internal:8085
